@@ -149,28 +149,6 @@ jQuery(document).ready(function () {
 
     var card_type = jQuery('#CardType');
 
-    jQuery('#AccountNumber').validateCreditCard(function(result) {
-
-        var cardtypenames = {
-            "amex"                      : "American Express",
-            "diners_club_carte_blanche" : "Diners Club Carte Blanche",
-            "diners_club_international" : "Diners Club International",
-            "discover"                  : "Discover",
-            "jcb"                       : "JCB",
-            "laser"                     : "Laser",
-            "maestro"                   : "Maestro",
-            "mastercard"                : "Mastercard",
-            "visa"                      : "Visa",
-            "visa_electron"             : "Visa Electron"
-        };
-
-        if(result.card_type) {
-            card_type.val(cardtypenames[result.card_type.name]);
-        } else {
-            card_type.val('Unknown Card Type');
-        }
-    });
-
     // Find ALL <form> tags on your page
     jQuery('form').submit(function(){
 
