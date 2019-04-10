@@ -390,10 +390,12 @@ function pmprommpu_addMembershipLevel($inlevel = NULL, $user_id = NULL, $force_a
 	$return = false;
 
 	$levelid = -1;
+	$level_to_add = ( is_numeric( $inlevel ) ) ? intval( $inlevel ) : (array) $inlevel;
 
 	// Make sure we have a level object.
-	if(is_array($inlevel))
+	if(is_array($inlevel)){
 		$inlevel = (object) $inlevel;
+	}
 
 	if(is_object($inlevel) && ( !empty($inlevel->id) || !empty($inlevel->membership_id)) ) {
 		$levelid = !empty($inlevel->id) ? $inlevel->id : $inlevel->membership_id;
@@ -424,5 +426,6 @@ function pmprommpu_addMembershipLevel($inlevel = NULL, $user_id = NULL, $force_a
 
 	// OK, we're legal (or don't care). Let's add it. Set elsewhere by filter, changeMembershipLevel should not disable old levels.
 	// Use the level object if it's there in pmpro_changeMembershipLevel.
-	return pmpro_changeMembershipLevel($inlevel, $user_id);
+	// we either need to return an array or an integer
+	return pmpro_changeMembershipLevel( $level_to_add, $user_id);
 }
