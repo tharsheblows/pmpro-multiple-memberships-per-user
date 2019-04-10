@@ -103,10 +103,10 @@ function pmprommpu_get_levels_and_groups_in_order($includehidden = false) {
 
 			$levelsingroup = $wpdb->get_col(
 				$wpdb->prepare( "
-					SELECT level 
-					FROM {$wpdb->pmpro_membership_levels_groups} AS mlg 
+					SELECT level
+					FROM {$wpdb->pmpro_membership_levels_groups} AS mlg
 					INNER JOIN {$wpdb->pmpro_membership_levels} AS ml ON ml.id = mlg.level AND ml.allow_signups LIKE %s
-					WHERE mlg.group = %d 
+					WHERE mlg.group = %d
 					AND ml.id IN (" . $included ." )
 					ORDER BY level ASC",
 				($includehidden ? '%' : 1),
@@ -423,5 +423,6 @@ function pmprommpu_addMembershipLevel($inlevel = NULL, $user_id = NULL, $force_a
 	}
 
 	// OK, we're legal (or don't care). Let's add it. Set elsewhere by filter, changeMembershipLevel should not disable old levels.
-	return pmpro_changeMembershipLevel($levelid, $user_id);
+	// Use the level object if it's there in pmpro_changeMembershipLevel.
+	return pmpro_changeMembershipLevel($inlevel, $user_id);
 }
