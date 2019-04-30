@@ -131,7 +131,7 @@ function pmprommpu_frontend_scripts() {
 	}
 
 	// Only load this on the checkout page
-	if ( is_page( $pmpro_pages['checkout'] ) ) {
+	if ( !empty( $pmpro_pages['checkout'] ) && is_page( $pmpro_pages['checkout'] ) ) {
 
 		global $pmpro_show_discount_code;
 
@@ -150,7 +150,7 @@ function pmprommpu_frontend_scripts() {
 	}
 
 	// If we're on a levels page, or the page contains the advanced levels page shortcode.
-	if ( is_page( $pmpro_pages['levels'] ) || ( !empty( $post->post_content ) && false !== stripos( $post->post_content, '[pmpro_advanced_levels' ) ) ) {
+	if ( ( ! empty( $pmpro_pages['levels'] ) && is_page( $pmpro_pages['levels'] ) ) || ( !empty( $post->post_content ) && false !== stripos( $post->post_content, '[pmpro_advanced_levels' ) ) ) {
 
 		$incoming_levels  = pmpro_getMembershipLevelsForUser();
 		$available_levels = pmpro_getAllLevels( false, true );
@@ -229,7 +229,7 @@ function pmprommpu_checkout_level_text( $intext, $levelids_adding, $levelids_del
 
 add_filter( 'pmprommpu_checkout_level_text', 'pmprommpu_checkout_level_text', 10, 3 );
 
-// Ensure than when a membership level is changed, it doesn't delete the old one or unsubscribe them at the gateway. 
+// Ensure than when a membership level is changed, it doesn't delete the old one or unsubscribe them at the gateway.
 // We'll handle both later in the process.
 function pmprommpu_pmpro_deactivate_old_levels( $insetting ) {
 	global $pmpro_pages;
@@ -258,7 +258,7 @@ function pmprommpu_pmpro_cancel_previous_subscriptions( $insetting ) {
 add_filter( 'pmpro_cancel_previous_subscriptions', 'pmprommpu_pmpro_cancel_previous_subscriptions', 10, 1 );
 
 // Called after the checkout process, we are going to do three things here:
-// First, process any extra levels that need to be charged/subbed for 
+// First, process any extra levels that need to be charged/subbed for
 // Then, any unsubscriptions that the user opted for (whose level ids are in $_REQUEST['dellevels']) will be dropped.
 // Then, any remaining conflicts will be dropped.
 function pmprommpu_pmpro_after_checkout( $user_id, $checkout_statuses ) {
@@ -424,8 +424,8 @@ function pmprommpu_pmpro_after_checkout( $user_id, $checkout_statuses ) {
 				$use_discount_code = false;
 			}
 
-			//update membership_user table.	
-			//(NOTE: we can avoid some DB calls by using the global $discount_code_id, but the core preheaders/checkout.php may have blanked it)	
+			//update membership_user table.
+			//(NOTE: we can avoid some DB calls by using the global $discount_code_id, but the core preheaders/checkout.php may have blanked it)
 			if ( ! empty( $discount_code ) && ! empty( $use_discount_code ) ) {
 				$discount_code_id = $wpdb->get_var( "SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . esc_sql( $discount_code ) . "' LIMIT 1" );
 			} else {
@@ -448,7 +448,7 @@ function pmprommpu_pmpro_after_checkout( $user_id, $checkout_statuses ) {
 			);
 
 			if ( pmpro_changeMembershipLevel( $custom_level, $user_id, 'changed' ) ) {
-				//we're good				
+				//we're good
 
 				//add an item to the history table, cancel old subscriptions
 				if ( ! empty( $morder ) ) {
@@ -530,9 +530,9 @@ function pmprommpu_pmpro_membership_levels_table( $intablehtml, $inlevelarr ) {
 	$allgroups     = pmprommpu_get_groups();
 	$alllevels     = pmpro_getAllLevels( true, true );
 	$gateway       = pmpro_getOption( "gateway" );
-	
+
 	ob_start();
-	
+
 	// Check for orphaned levels
 	$orphaned_level_ids = array_combine( array_keys( $alllevels ), array_keys( $alllevels ) );
 	foreach( $groupsnlevels as $group_id => $group ) {
@@ -546,7 +546,7 @@ function pmprommpu_pmpro_membership_levels_table( $intablehtml, $inlevelarr ) {
 	unset( $group_id );
 	unset( $group );
 	unset( $level_id );
-	
+
 	// We found some
 	if ( ! empty( $orphaned_level_ids ) && ! empty( $first_group_id ) ) {
 		foreach( $orphaned_level_ids as $orphaned_level_id ) {
@@ -893,10 +893,10 @@ function pmprommpu_on_del_level( $levelid ) {
 	if ( false === $wpdb->delete( $wpdb->pmpro_membership_levels_groups, array( 'level' => $levelid ) ) ) {
 	    global $pmpro_msg;
 	    global $pmpro_msgt;
-	    
+
 	    $pmpro_msg = __( "Unable to delete the level from its group", "pmpro-multiple-memberships-per-user" );
 	    $pmpro_msgt = "pmpro_error";
-	    
+
     }
 }
 
