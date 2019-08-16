@@ -25,6 +25,7 @@ add_action( 'init', 'pmprommpu_init_profile_hooks' );
  *  add_action( 'edit_user_profile', 'pmprommpu_membership_level_profile_fields' );
  */
 function pmprommpu_membership_level_profile_fields( $user ) {
+	error_log( __FILE__ . __LINE__, 0 );
 	global $current_user;
 
 	$membership_level_capability = apply_filters( 'pmpro_edit_member_capability', 'manage_options' );
