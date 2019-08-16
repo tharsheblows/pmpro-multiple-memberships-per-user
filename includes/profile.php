@@ -352,6 +352,7 @@ function pmprommpu_membership_level_profile_fields_update() {
 			$droppedlevels[] = $leveltodel;
 		}
 	}
+
 	// Next, let's update the expiration on any existing levels - as long as the level isn't in one of the ones we dropped them from.
 	if(array_key_exists('expires', $_REQUEST)) {
 		foreach($_REQUEST['expires'] as $expkey => $doesitexpire) {
