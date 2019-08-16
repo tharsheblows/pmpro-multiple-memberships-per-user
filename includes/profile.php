@@ -339,7 +339,8 @@ function pmprommpu_membership_level_profile_fields_update() {
 	// get the user id
 	global $wpdb, $current_user;
 	wp_get_current_user();
-
+	error_log( __FILE__ . __LINE__, 0 );
+	error_log( print_r( $_REQUEST, true ), 0 );
 	if ( ! empty( $_REQUEST['user_id'] ) ) {
 		$user_id = $_REQUEST['user_id'];
 	} else {
@@ -387,7 +388,7 @@ function pmprommpu_membership_level_profile_fields_update() {
 			$droppedlevels[] = $leveltodel;
 		}
 	}
-
+	error_log( __FILE__ . __LINE__ , 0 );
 	// Next, let's update the expiration on any existing levels - as long as the level isn't in one of the ones we dropped them from.
 	if ( array_key_exists( 'expires', $_REQUEST ) ) {
 		foreach ( $_REQUEST['expires'] as $expkey => $doesitexpire ) {
